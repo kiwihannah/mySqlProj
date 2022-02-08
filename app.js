@@ -5,7 +5,7 @@ const mysql = require("mysql2");
 
 /* DB 연결 확인*/
 const conn = mysql.createConnection({
-  host: "localhost",
+  host: "3.35.169.150",
   user: "root",
   password: "1234",
   //database: '[이름]'
