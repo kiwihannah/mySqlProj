@@ -1,3 +1,5 @@
+"use strict";
+
 const express = require("express");
 const app = express();
 const port = 3000;
@@ -6,9 +8,9 @@ const mysql = require("mysql2");
 /* DB 연결 확인*/
 const conn = mysql.createConnection({
   host: "3.35.169.150",
-  user: "root",
+  user: "local",
   password: "1234",
-  //database: '[이름]'
+  // database: "my_board",
 });
 conn.connect(function (err) {
   if (err) throw err;
@@ -36,6 +38,8 @@ const myLogger = function (req, res, next) {
   next();
 };
 app.use(myLogger);
+app.use(express.json()); //Express 4.16 버전 이상 내장됨
+app.use(express.urlencoded({ extended: false })); // url 형식의 data 전달
 
 /* static 파일 자동 반환 */
 app.use(express.static("./static"));
@@ -44,3 +48,9 @@ app.use(express.static("./static"));
 //app.use("/api", express.urlencoded({ extended: false }), router);
 const userRouter = require("./routes/user");
 app.use("/api", [userRouter]);
+
+// router.use('/api', [...routers])  --> 문법 차이가 뭔지 알아보기
+
+app.get("/api/hello", function (req, res) {
+  res.send("axios testing data");
+});

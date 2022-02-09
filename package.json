@@ -11,6 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.25.0",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.6",
     "express": "^4.17.2",
     "jest": "^27.5.0",
     "joi": "^17.6.0",

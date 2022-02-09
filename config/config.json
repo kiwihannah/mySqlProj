@@ -1,22 +1,22 @@
 {
   "development": {
-    "username": "root",
+    "username": "local",
     "password": "1234",
-    "database": "database_development",
+    "database": "my_board",
     "host": "3.35.169.150",
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
+    "username": "local",
     "password": "1234",
-    "database": "database_test",
+    "database": "my_test",
     "host": "3.35.169.150",
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
+    "username": "local",
     "password": "1234",
-    "database": "database_production",
+    "database": "my_production",
     "host": "3.35.169.150",
     "dialect": "mysql"
   }
