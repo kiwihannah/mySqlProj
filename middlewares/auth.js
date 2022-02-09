@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const User = require("../models/").default;
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;

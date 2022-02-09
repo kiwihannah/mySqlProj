@@ -1,17 +1,20 @@
 "use strict";
 const Joi = require("joi");
 
-const validator = { 
+const validator = {
   signUp: async (req, res, next) => {
-    const { name, email, password, confirm_password, phone, birthday } = req.body;
+    const { name, email, password, confirm_password, phone, birthday } =
+      req.body;
     // console.log( name, email, password, confirm_password, phone, birthday );
     const schema = Joi.object().keys({
       name: Joi.string().min(3).max(20).required(),
       email: Joi.string().email().min(6).max(35).required(),
       password: Joi.string().min(3).max(20).required(),
       confirm_password: Joi.string().required(),
-      phone: Joi.string().regex(/^\d{3}-\d{4}-\d{4}$/).required(),
-      birthday: Joi.date().max('1-1-2023').iso(),
+      phone: Joi.string()
+        .regex(/^\d{3}-\d{4}-\d{4}$/)
+        .required(),
+      birthday: Joi.date().max("1-1-2023").iso(),
     });
 
     try {

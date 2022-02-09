@@ -1,36 +1,50 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { Op } = require("sequelize");
-const jwt = require("jsonwebtoken");
-
-const auth = require("../middlewares/auth");
-const User = require("../models/user");
-
-router.post("/users", async (req, res) => {
-  const { email, nickname, password, confirmPassword } = req.body;
-
-  if (password !== confirmPassword) {
-    res.status(400).send({
-      errorMessage: "패스워드가 패스워드 확인란과 다릅니다.",
+const conn = require('../config/db'); //seq
+const User = require('../models/user');
+ 
+router.get('/users', function(req, res, next) {
+  conn.connect(function(err) {
+    if (err) throw err;
+    conn.query('SELECT * FROM users ORDER BY id desc',function(err,rows) {
+      err ? res.status(400).send({}) : res.status(200).send({ users : rows });
     });
-    return;
-  }
-
-  // email or nickname이 동일한게 이미 있는지 확인하기 위해 가져온다.
-  const existsUsers = await User.findAll({
-    where: {
-      [Op.or]: [{ email }, { nickname }],
-    },
   });
-  if (existsUsers.length) {
-    res.status(400).send({
-      errorMessage: "이메일 또는 닉네임이 이미 사용중입니다.",
-    });
-    return;
-  }
+});
 
-  await User.create({ email, nickname, password });
-  res.status(201).send({});
+router.post('/sign-up', function(req, res, next) {
+  conn.connect(function(err) {
+    if (err) throw err;
+    const { name, email, password, phone, birthday } = req.body;
+    let sql =`INSERT INTO users (name, email, password, phone, birthday) 
+              VALUES ('${name}', '${email}', '${password}', '${phone}', '${birthday}')`;
+    conn.query(sql, function (err, result) {
+      if (err) throw err;
+      err ? res.status(400).send({}) : res.status(200).send({});
+    });
+  });
+});
+
+router.get('/users/:id', function(req, res, next) {
+    let { id } = req.params;
+    conn.query('SELECT * FROM users WHERE id = ' + id, function(err, rows, fields) {
+        if(err) throw err
+        rows.length >= 0 ? res.status(200).send({}) : res.status(400).send({ users : rows });
+    });
+});
+
+router.post('/users/:id', function(req, res, next) {
+    // let { name, email, password, phone, birthday } = req.body;
+    conn.query('UPDATE users SET ? WHERE id = ' + id, req.body, function(err, result) {
+        err ? res.status(400).send({}) : res.status(200).send({});
+    });
+});
+   
+router.delete('/users/:id', function(req, res, next) {
+    let { id } = req.params;
+    conn.query('DELETE FROM books WHERE id = ' + id, function(err, result) {
+      err ? res.status(400).send({}) : res.status(200).send({});
+    });
 });
 
 module.exports = router;
